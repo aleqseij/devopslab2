@@ -1,0 +1,20 @@
+---
+- name: Verify Cluster
+  hosts: k8s_master
+  become: yes
+  tasks:
+    - name: Check nodes
+      shell: kubectl get nodes -o wide
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+      register: nodes_out
+    
+    - debug: msg="{{ nodes_out.stdout_lines }}"
+
+    - name: Check system pods
+      shell: kubectl get pods -n kube-system
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+      register: pods_out
+      
+    - debug: msg="{{ pods_out.stdout_lines }}"
