@@ -1,0 +1,26 @@
+---
+- name: Join worker nodes
+  hosts: k8s_workers
+  become: yes
+  tasks:
+    - name: Reset kubeadm (optional)
+      shell: kubeadm reset -f
+      ignore_errors: yes
+
+    - name: Read join command locally
+      local_action:
+        module: slurp
+        src: "/tmp/k8s_join_command"
+      register: join_command_b64
+      run_once: true
+      become: no
+
+    - name: Join cluster
+      shell: "{{ join_command_b64['content'] | b64decode }}"
+      args:
+        creates: /etc/kubernetes/kubelet.conf
+
+    - name: Wait for kubelet config
+      wait_for:
+        path: /etc/kubernetes/kubelet.conf
+        timeout: 60
