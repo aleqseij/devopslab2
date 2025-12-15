@@ -16,10 +16,10 @@
       blockinfile:
         path: /etc/hosts
         block: |
-          192.168.1.83 k8s-master-01
+          192.168.1.82 k8s-master-01
           192.168.1.84 k8s-worker-01
           192.168.1.85 k8s-worker-02
-          192.168.1.86 k8s-worker-03
+          192.168.1.83 k8s-worker-03
         marker: "# {mark} ANSIBLE MANAGED BLOCK K8S"
 
     # --- СИСТЕМА ---
